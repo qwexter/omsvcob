@@ -5,7 +5,7 @@ import xyz.qwexter.sample.Db
 import xyz.qwexter.sample.SimplePipelineRepository
 
 fun main() {
-    val dividers = listOf(1, 2, 5, 10, 25, 50)
+    val dividers = listOf(1.0, 0.7, 0.5, 0.3, 0.1, 0.0)
     val batchSizes = listOf(100, 1000, 10000, 100000, 1000000)
     val repositories = listOf(
         "Simple Pipeline" to ::SimplePipelineRepository,
@@ -26,12 +26,14 @@ fun main() {
                     "sequenceCustom" to repository.getItemsListCustomSequence().size
                 )
 
-                println("| $repoName | $divider | $batchSize " +
-                        "| ${results["baseline"]} " +
-                        "| ${results["buildlist"]} " +
-                        "| ${results["collection operators"]} " +
-                        "| ${results["sequence"]} " +
-                        "| ${results["sequenceCustom"]} |")
+                println(
+                    "| $repoName | $divider | $batchSize " +
+                            "| ${results["baseline"]} " +
+                            "| ${results["buildlist"]} " +
+                            "| ${results["collection operators"]} " +
+                            "| ${results["sequence"]} " +
+                            "| ${results["sequenceCustom"]} |"
+                )
             }
         }
     }

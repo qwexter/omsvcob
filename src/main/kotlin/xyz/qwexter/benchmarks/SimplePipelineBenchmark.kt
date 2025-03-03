@@ -15,17 +15,17 @@ import java.util.concurrent.TimeUnit
 @Measurement(iterations = 25, time = 1, timeUnit = TimeUnit.SECONDS)
 open class SimplePipelineBenchmark {
 
-    @Param("1", "2", "5", "10", "25", "50")
-    var divider: Int = 10
+    @Param("1.0", "0.7", "0.5", "0.3", "0.1", "0.0")
+    private var percent: Double = 1.0
 
     @Param("100", "1000", "10000", "100000", "1000000")
-    var batchSize: Int = 10000
+    private var batchSize: Int = 0
 
     private lateinit var repository: DataRepository
 
     @Setup
     fun setup() {
-        repository = SimplePipelineRepository(Db(divider, batchSize))
+        repository = SimplePipelineRepository(Db(percent, batchSize))
     }
 
     @Benchmark
