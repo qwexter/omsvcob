@@ -23,11 +23,6 @@ enum class DistributionType {
     Distributed,
 
     /**
-     * Elements are arranged in clusters (groups of enabled elements followed by disabled)
-     */
-    Clustered,
-
-    /**
      * Elements are arranged so that enabled elements appear at the end
      */
     Reversed
@@ -57,7 +52,6 @@ object DataGenerator {
             DistributionType.Ordered -> createOrderedDistribution(batchSize, enabledCount)
             DistributionType.Shuffled -> createShuffledDistribution(batchSize, enabledCount)
             DistributionType.Distributed -> createEvenDistribution(batchSize, enabledCount)
-            DistributionType.Clustered -> createClusteredDistribution(batchSize, enabledCount, passPercentage)
             DistributionType.Reversed -> createOrderedDistribution(batchSize, enabledCount).reversed()
         }
     }
@@ -100,42 +94,4 @@ object DataGenerator {
         return items
     }
 
-    private fun createClusteredDistribution(batchSize: Int, enabledCount: Int, passPercentage: Double): List<DbModel> {
-        val items = mutableListOf<DbModel>()
-
-        // Create clusters of enabled elements followed by disabled elements
-        val clusterSize = 10 // Size of each cluster
-        val enabledPerCluster = (clusterSize * passPercentage).roundToInt()
-
-        var remainingEnabled = enabledCount
-        var i = 0
-
-        while (i < batchSize) {
-            val clusterEnabledCount = minOf(enabledPerCluster, remainingEnabled)
-
-            // Add enabled elements for this cluster
-            for (j in 0 until clusterEnabledCount) {
-                if (i < batchSize) {
-                    items.add(DbModel(id = i++, isEnabled = true))
-                }
-            }
-
-            // Add disabled elements for this cluster
-            for (j in 0 until (clusterSize - enabledPerCluster)) {
-                if (i < batchSize) {
-                    items.add(DbModel(id = i++, isEnabled = false))
-                }
-            }
-
-            remainingEnabled -= clusterEnabledCount
-            if (remainingEnabled <= 0) {
-                // Fill the rest with disabled elements
-                while (i < batchSize) {
-                    items.add(DbModel(id = i++, isEnabled = false))
-                }
-            }
-        }
-
-        return items
-    }
 }
