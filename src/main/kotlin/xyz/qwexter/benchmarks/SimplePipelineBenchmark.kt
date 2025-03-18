@@ -9,16 +9,9 @@ import java.util.concurrent.TimeUnit
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
-@Fork(
-    value = 2, jvmArgsAppend = [
-        "-XX:+UseG1GC",
-        "-Xms2g",
-        "-Xmx2g",
-        "-XX:+AlwaysPreTouch"
-    ]
-)
-@Warmup(iterations = 1, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 1, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(2)
+@Warmup(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 25, time = 1, timeUnit = TimeUnit.SECONDS)
 open class SimplePipelineBenchmark {
 
     @Param("1.0", "0.9", "0.75", "0.5", "0.25", "0.1", "0.0")
